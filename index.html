@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Une surprise pour toi ❤️</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, serif;
+      color: #542333;
+      background: linear-gradient(145deg, #fff5f5, #f5dce4);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      padding: 28px 22px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid #eac6d2;
+      border-radius: 24px;
+      box-shadow: 0 12px 40px #8b40521c;
+    }
+
+    h1 { font-size: 2rem; }
+
+    p {
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    .heart { font-size: 48px; }
+
+    .photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .photos img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
+    button {
+      background: #873b55;
+      color: white;
+      border: 0;
+      border-radius: 24px;
+      padding: 13px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 6px;
+    }
+
+    #message { display: none; }
+
+    footer {
+      margin-top: 24px;
+      font-size: .8rem;
+      opacity: .7;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="heart">❤️</div>
+    <h1>Une petite surprise</h1>
+    <p>J'ai préparé quelque chose de spécial pour toi...</p>
+
+    <div class="photos">
+      <img src="images/photo1.jpg" alt="Notre souvenir 1">
+      <img src="images/photo2.jpg" alt="Notre souvenir 2">
+    </div>
+
+    <button id="play">▶ Écouter la musique</button>
+    <p id="audio-note">La musique sera ajoutée ici.</p>
+
+    <button id="reveal">Découvrir mon message 💌</button>
+    <p id="message">Tu es une personne spéciale, et cette petite surprise est pour toi. ❤️</p>
+
+    <footer>Une création faite avec amour</footer>
+  </main>
+
+  <script>
+    const reveal = document.getElementById("reveal");
+    const message = document.getElementById("message");
+
+    reveal.addEventListener("click", () => {
+      message.style.display =
+        message.style.display === "block" ? "none" : "block";
+      reveal.textContent =
+        message.style.display === "block"
+          ? "Refermer 💌"
+          : "Découvrir mon message 💌";
+    });
+
+    document.getElementById("play").addEventListener("click", () => {
+      alert("La musique sera activée après son ajout au site.");
+    });
+  </script>
+</body>
+</html>
