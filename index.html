@@ -243,33 +243,21 @@ footer {
   background: rgba(27,16,53,.6);
 }
 .cover-wrap {
-  position: relative;
-  width: 190px; height: 190px;
+  width: 220px; height: 220px;
   margin: 6px auto 22px;
 }
-.cover-wrap::before, .cover-wrap::after {
-  content: "";
-  position: absolute;
-  border-radius: 34px;
-  border: 1px solid rgba(232,160,191,.35);
-}
-.cover-wrap::before { inset: -10px; transform: rotate(-5deg); }
-.cover-wrap::after { inset: -20px; transform: rotate(4deg); border-color: rgba(181,127,224,.25); }
-.cover {
-  position: relative;
-  z-index: 1;
+.scene {
   display: block;
   width: 100%; height: 100%;
   border-radius: 28px;
-  object-fit: cover;
-  border: 2px solid rgba(255,248,225,.6);
-  box-shadow: 0 14px 40px rgba(0,0,0,.45), 0 0 50px rgba(232,127,176,.35);
-  transition: transform .6s ease;
+  border: 2px solid rgba(255,248,225,.5);
+  box-shadow: 0 14px 40px rgba(0,0,0,.45), 0 0 50px rgba(255,140,90,.4);
 }
-.player.playing .cover { transform: scale(1.04); }
-.player.playing .cover-wrap::before { animation: pulse 2.4s ease-in-out infinite; }
-.player.playing .cover-wrap::after { animation: pulse 2.4s ease-in-out .6s infinite; }
-@keyframes pulse { 50% { opacity: .2; transform: scale(1.05) rotate(0deg); } }
+.w { animation: vague 6s linear infinite; animation-play-state: paused; }
+.w2 { animation-duration: 8s; animation-direction: reverse; }
+.w3 { animation-duration: 5s; }
+.player.playing .w { animation-play-state: running; }
+@keyframes vague { to { transform: translateX(-100px); } }
 .player h3 { margin: 0; font-size: 26px; letter-spacing: 1px; }
 .artist { margin: 2px 0 10px; color: var(--pink2); font: 12px Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; }
 .eq { display: flex; justify-content: center; align-items: flex-end; gap: 4px; height: 22px; margin-bottom: 12px; }
@@ -297,6 +285,15 @@ footer {
 .track { height: 6px; background: #ffffff25; border-radius: 6px; overflow: hidden; }
 .fill { height: 100%; width: 0; background: linear-gradient(90deg, #e87fb0, #b57fe0); }
 .times { display: flex; justify-content: space-between; font: 13px Arial, sans-serif; color: #e6cfe6; }
+.declaration { margin: 20px 0 8px; font-style: italic; }
+.declaration p { margin: 0 0 12px; }
+.declaration .dedicace {
+  margin: 18px 0 0;
+  text-align: right;
+  font-size: 18px;
+  font-weight: bold;
+  color: #8a2a5e;
+}
 @media(max-width:360px) {
   .card { padding: 21px 14px; }
   .gallery img { height: 160px; }
@@ -419,7 +416,43 @@ footer {
       <p>La plus belle partie, c'est encore tous les souvenirs qui restent à créer.</p>
       <div class="player" id="player">
         <div class="cover-wrap">
-          <img class="cover" id="cover" src="pochette.jpg" alt="Pochette de Rétine" onerror="this.style.visibility='hidden'">
+          <svg class="scene" viewBox="0 0 200 200" role="img" aria-label="Coucher de soleil sur la mer">
+            <defs>
+              <linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2b1055"/>
+                <stop offset=".35" stop-color="#9c2a6b"/>
+                <stop offset=".65" stop-color="#ff6f5e"/>
+                <stop offset="1" stop-color="#ffc27a"/>
+              </linearGradient>
+              <linearGradient id="mer" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3b2a6b"/>
+                <stop offset="1" stop-color="#0b1026"/>
+              </linearGradient>
+              <radialGradient id="soleil">
+                <stop offset="0" stop-color="#fffbe6"/>
+                <stop offset=".6" stop-color="#ffd27a"/>
+                <stop offset="1" stop-color="#ff9a5a"/>
+              </radialGradient>
+            </defs>
+            <rect width="200" height="200" fill="url(#ciel)"/>
+            <circle cx="30" cy="22" r="1.2" fill="#fff" opacity=".8"/>
+            <circle cx="150" cy="16" r="1" fill="#fff" opacity=".7"/>
+            <circle cx="175" cy="42" r="1.3" fill="#fff" opacity=".8"/>
+            <circle cx="70" cy="40" r="1" fill="#fff" opacity=".6"/>
+            <circle cx="100" cy="112" r="55" fill="#ffb27a" opacity=".25"/>
+            <circle cx="100" cy="112" r="30" fill="url(#soleil)"/>
+            <path d="M138 55 q6 -6 12 0 q6 -6 12 0" stroke="#2b1055" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>
+            <rect y="112" width="200" height="88" fill="url(#mer)"/>
+            <g fill="#ffd27a">
+              <rect x="82" y="116" width="36" height="2.5" rx="1.2" opacity=".85"/>
+              <rect x="88" y="123" width="24" height="2.5" rx="1.2" opacity=".7"/>
+              <rect x="92" y="130" width="16" height="2.5" rx="1.2" opacity=".55"/>
+              <rect x="95" y="137" width="10" height="2" rx="1" opacity=".4"/>
+            </g>
+            <path class="w w1" fill="#4a3a86" opacity=".55" d="M0 128 Q25 118 50 128 T100 128 T150 128 T200 128 T250 128 T300 128 V200 H0Z"/>
+            <path class="w w2" fill="#2d2766" opacity=".75" d="M0 148 Q25 138 50 148 T100 148 T150 148 T200 148 T250 148 T300 148 V200 H0Z"/>
+            <path class="w w3" fill="#161a45" d="M0 170 Q25 160 50 170 T100 170 T150 170 T200 170 T250 170 T300 170 V200 H0Z"/>
+          </svg>
         </div>
         <h3>Rétine</h3>
         <div class="artist">Amir</div>
@@ -429,6 +462,14 @@ footer {
         <div class="seek" id="seek"><div class="track"><div class="fill" id="fill"></div></div></div>
         <div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
         <audio id="audio" src="musique.mp3" preload="metadata"></audio>
+      </div>
+
+      <div class="letter declaration">
+        <p>Je ne sais pas si les mots suffisent, mais je voulais essayer.</p>
+        <p>Avec toi, les journées ont une autre couleur, plus douce, plus lumineuse. Tu rends les choses simples belles, et sans même t'en rendre compte, tu as pris une place précieuse dans mes pensées.</p>
+        <p>Alors voilà, sans détour : je t'aime. ❤️</p>
+        <p>Dans mon métier, tout doit s'équilibrer. Avec toi, j'ai trouvé la seule chose qui rend mon bilan parfait.</p>
+        <p class="dedicace">Ton Expert-comptable préféré 💼</p>
       </div>
       <button class="secondary" onclick="go(0)">Recommencer l'aventure ↺</button>
     </div>
