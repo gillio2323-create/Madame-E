@@ -21,11 +21,94 @@ body {
   padding: 20px 14px 40px;
   font-family: Georgia, serif;
   color: var(--text);
-  background:
-    radial-gradient(ellipse at top, #394568 0%, transparent 60%),
-    linear-gradient(160deg, var(--night), #10182c);
+  overflow-x: hidden;
+  /* Fond lunaire animé : mélange des 5 ambiances */
+  background: linear-gradient(160deg,
+    #0B1026, #1B1035, #5B2A6E, #5A0F2E, #E8A0BF, #F4C7A1, #7A6BB5, #2A3A7A);
+  background-size: 400% 400%;
+  animation: nuit 40s ease-in-out infinite;
 }
+@keyframes nuit {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ===== Ambiance : lune, étoiles, cœurs ===== */
+.moon {
+  position: fixed; top: 6%; left: 50%;
+  width: 80px; height: 80px; margin-left: -40px;
+  border-radius: 50%;
+  background: #FFF8E1;
+  box-shadow: 0 0 60px #FFF8E1, 0 0 140px rgba(122,107,181,.6);
+  animation: flotte 8s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+@keyframes flotte { 50% { transform: translateY(12px); } }
+
+.etoile {
+  position: fixed;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: .2;
+  animation: scintille 3s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+@keyframes scintille { 50% { opacity: 1; transform: scale(1.6); } }
+
+.filante {
+  position: fixed;
+  width: 120px; height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), #fff);
+  opacity: 0;
+  transform: rotate(-35deg);
+  z-index: 0;
+  pointer-events: none;
+  animation: filer 1.4s ease-out forwards;
+}
+@keyframes filer {
+  0% { opacity: 0; transform: translate(0,0) rotate(-35deg); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-380px, 266px) rotate(-35deg); }
+}
+
+.coeur {
+  position: fixed;
+  bottom: -30px;
+  color: #E8A0BF;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+  animation: monte linear forwards;
+}
+@keyframes monte {
+  0% { opacity: 0; transform: translateY(0) scale(.8); }
+  15% { opacity: .8; }
+  100% { opacity: 0; transform: translateY(-110vh) translateX(30px) scale(1.2); }
+}
+
+.jaillit {
+  position: fixed;
+  pointer-events: none;
+  color: #E8A0BF;
+  z-index: 50;
+  animation: jaillir 1.2s ease-out forwards;
+}
+@keyframes jaillir {
+  0% { opacity: 1; transform: translate(0,0) scale(.6); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body, .moon, .etoile { animation: none; }
+}
+
+/* ===== Ton site ===== */
 main {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 540px;
   margin: 0 auto;
@@ -44,7 +127,10 @@ h1 { font-size: clamp(28px, 7vw, 40px); margin: 12px 0; }
 h2 { font-size: 26px; }
 p { line-height: 1.75; }
 .card {
-  background: rgba(255,250,253,.07);
+  /* fond plus sombre pour garder le texte lisible sur les zones roses */
+  background: rgba(16,24,44,.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(247,220,232,.3);
   border-radius: 24px;
   padding: 25px 20px;
@@ -144,7 +230,7 @@ button:focus-visible, a:focus-visible {
 }
 footer {
   text-align: center;
-  color: #f7dce899;
+  color: #f7dce8cc;
   font: 12px Arial, sans-serif;
   margin-top: 22px;
 }
@@ -155,6 +241,8 @@ footer {
 </style>
 </head>
 <body>
+<div class="moon"></div>
+
 <main>
   <header class="top">
     <div class="eyebrow">Un petit secret rien que pour toi</div>
@@ -276,6 +364,7 @@ footer {
 </main>
 
 <script>
+/* ===== Logique du site ===== */
 const total = 7;
 const clues = [
   "Les meilleurs souvenirs sont souvent ceux que l'on partage. 💗",
@@ -316,6 +405,65 @@ function finish() {
     "Quel que soit ton choix, merci d'avoir partagé cette petite aventure. ❤️";
   setTimeout(() => go(7), 900);
 }
+
+/* ===== Ambiance lunaire ===== */
+const symboles = ['♥', '❤', '♡'];
+
+// Étoiles scintillantes
+for (let i = 0; i < 70; i++) {
+  const s = document.createElement('div');
+  s.className = 'etoile';
+  s.style.top = Math.random() * 100 + 'vh';
+  s.style.left = Math.random() * 100 + 'vw';
+  s.style.animationDelay = Math.random() * 3 + 's';
+  s.style.animationDuration = 2 + Math.random() * 3 + 's';
+  document.body.appendChild(s);
+}
+
+// Étoile filante toutes les 5 à 10 secondes
+function filante() {
+  const f = document.createElement('div');
+  f.className = 'filante';
+  f.style.top = Math.random() * 40 + 'vh';
+  f.style.left = 40 + Math.random() * 60 + 'vw';
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 1500);
+  setTimeout(filante, 5000 + Math.random() * 5000);
+}
+setTimeout(filante, 3000);
+
+// Petit cœur qui monte toutes les 900 ms
+function coeur() {
+  const c = document.createElement('div');
+  c.className = 'coeur';
+  c.textContent = symboles[Math.floor(Math.random() * 3)];
+  c.style.left = Math.random() * 100 + 'vw';
+  c.style.fontSize = 12 + Math.random() * 16 + 'px';
+  const d = 6 + Math.random() * 5;
+  c.style.animationDuration = d + 's';
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), d * 1000);
+}
+setInterval(coeur, 900);
+
+// Cœurs qui jaillissent au clic ou au toucher
+function explosion(x, y) {
+  for (let i = 0; i < 8; i++) {
+    const c = document.createElement('div');
+    c.className = 'jaillit';
+    c.textContent = symboles[Math.floor(Math.random() * 3)];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 70;
+    c.style.left = x + 'px';
+    c.style.top = y + 'px';
+    c.style.fontSize = 12 + Math.random() * 14 + 'px';
+    c.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    c.style.setProperty('--dy', Math.sin(angle) * dist - 30 + 'px');
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1200);
+  }
+}
+document.addEventListener('pointerdown', e => explosion(e.clientX, e.clientY));
 </script>
 </body>
 </html>
