@@ -403,8 +403,8 @@ footer {
       <div class="eyebrow">Le dernier chapitre</div>
       <h2>On crée d'autres souvenirs ?</h2>
       <p>J'aimerais qu'on partage encore de beaux moments, des rires et des histoires à raconter.</p>
-      <button onclick="finish()">Oui, avec plaisir 💖</button>
-      <button class="secondary" onclick="finish()">Je veux y réfléchir 😊</button>
+      <button onclick="finish('Oui, avec plaisir')">Oui, avec plaisir 💖</button>
+      <button class="secondary" onclick="finish('Je veux y réfléchir')">Je veux y réfléchir 😊</button>
       <p id="ending" class="feedback"></p>
     </div>
   </section>
@@ -488,6 +488,29 @@ const clues = [
 ];
 const found = new Set();
 
+// >>> Colle ici ton lien Formspree (ex : https://formspree.io/f/abcdwxyz)
+const FORMSPREE_URL = "https://formspree.io/f/mppqdegy";
+
+const choices = {};
+const labels = {
+  1: { A: "Le lieu où il s'est passé", B: "La personne avec qui on le partage", C: "La date sur le calendrier" },
+  2: { A: "Une journée pleine de rires", B: "Un souvenir à garder longtemps", C: "Un message écrit avec le coeur" }
+};
+function envoyerReponses(final) {
+  const data = {
+    "Question 1": choices["Question 1"] || "Pas de réponse",
+    "Question 2": choices["Question 2"] || "Pas de réponse",
+    "Indices trouvés": found.size ? [...found].map(n => "Indice " + (n + 1)).join(", ") : "Aucun",
+    "Réponse finale": final
+  };
+  fetch(FORMSPREE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify(data),
+    keepalive: true
+  }).catch(() => {});
+}
+
 function go(n) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById("p" + n).classList.add("active");
@@ -509,6 +532,7 @@ function answer(question, choice) {
         C: "Un message sincère peut faire toute la différence. 💌"
       };
   document.getElementById("f" + question).textContent = messages[choice];
+  choices["Question " + question] = labels[question][choice];
 }
 function star(n) {
   found.add(n);
@@ -516,7 +540,8 @@ function star(n) {
   document.getElementById("clue").textContent =
     clues[n] + (found.size === 3 ? " Tous les indices sont révélés !" : "");
 }
-function finish() {
+function finish(reponse) {
+  envoyerReponses(reponse);
   document.getElementById("ending").textContent =
     "Quel que soit ton choix, merci d'avoir partagé cette petite aventure. ❤️";
   setTimeout(() => go(7), 900);
